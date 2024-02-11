@@ -17,6 +17,8 @@ parts:
     source-type: git
     source: https://github.com/claudiodangelis/qrcp.git
     source-tag: '0.11.2'
+    build-snaps:
+      - go
 
   qrshare:
     source: https://github.com/faveoled/qrshare.git
