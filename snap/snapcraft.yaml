@@ -11,14 +11,29 @@ grade: stable
 architectures:
   - build-on: [amd64]
   - build-on: [arm64]
+parts:
+  qrcp:
+    plugin: go
+    source-type: git
+    source: https://github.com/claudiodangelis/qrcp.git
+    source-tag: '0.11.2'
+
+  qrshare:
+    source: https://github.com/faveoled/qrshare.git
+    source-tag: '20240211'
+    plugin: flutter
+    flutter-target: lib/main.dart
+    build-packages:
+      - curl
+      - jq
+      - libjsoncpp-dev
+    stage-packages:
+      - libjsoncpp25
+      - zenity          
 
 apps:
   qrshare:
     command: qrshare
     extensions: [gnome]
-
-parts:
-  qrshare:
-    source: .
-    plugin: flutter
-    flutter-target: lib/main.dart
+    plugs:
+      - home
