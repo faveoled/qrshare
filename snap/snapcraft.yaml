@@ -1,0 +1,20 @@
+name: qrshare
+version: '1.0.0'
+summary: s
+description: |
+  D.
+
+base: core22
+confinement: strict
+grade: stable
+
+apps:
+  qrshare:
+    command: qrshare
+    extensions: [gnome]
+
+parts:
+  qrshare:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart
