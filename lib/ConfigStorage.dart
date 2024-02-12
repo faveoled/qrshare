@@ -2,31 +2,51 @@ import 'dart:io';
 
 import 'package:qrshare/QrcpConfig.dart';
 
+extension StringExtensions on String {
+  String removeTrailingSlash() {
+    if (endsWith('/')) {
+      return substring(0, length - 1);
+    } else {
+      return this;
+    }
+  }
+}
+
 class ConfigStorage {
 
-  String getConfigFile() {
+  void ensureDirectory(String filePath) {
+    final dirPath = Directory(filePath).parent.path;
+    final dir = Directory(dirPath);
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
+  }
+
+  String ensureConfigFile() {
     final envVar = Platform.environment['XDG_CONFIG_HOME'];
     final homeVar = Platform.environment['HOME'];
     if (homeVar == null) {
       throw Exception("HOME is not defined");
     }
     final targetVar = envVar ?? homeVar;
-    return '$targetVar/.config/qrcp/config.yml';
+    var finalLocation = '${targetVar.removeTrailingSlash()}/.config/qrcp/config.yml';
+    ensureDirectory(finalLocation);
+    return finalLocation;
   }
 
   void writeConfig(QrcpConfig config) {
-    var file = File(getConfigFile());
+    var file = File(ensureConfigFile());
     file.writeAsStringSync(config.toYaml());
   }
 
   void writeFile(String content) {
-    var file = File(getConfigFile());
+    var file = File(ensureConfigFile());
     file.createSync(recursive: true);
     file.writeAsStringSync(content);
   }
 
   String readConfigStr() {
-    var file = File(getConfigFile());
+    var file = File(ensureConfigFile());
     return file.readAsStringSync();
   }
 
@@ -39,7 +59,7 @@ class ConfigStorage {
   }
 
   bool isConfigPresent() {
-    var file = File((getConfigFile()));
+    var file = File((ensureConfigFile()));
     return file.existsSync();
   }
 }
