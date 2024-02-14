@@ -305,20 +305,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (_receiveQrUrl == null)
-                          const Text("Waiting for server startup...")
-                        else
-                          QrImageView(
-                            data: _receiveQrUrl!,
-                            version: QrVersions.auto,
-                            size: 300.0,
-                          ),
-                        const Text(
-                          "Scan with your mobile device",
-                          style: TextStyle(fontSize: 20),
-                        )
-                      ],
+                      children:
+                        (_receiveQrUrl == null) ?
+                          [ const Text("Waiting for server startup...") ]
+                        :
+                          [
+                            QrImageView(
+                              data: _receiveQrUrl!,
+                              version: QrVersions.auto,
+                              size: 300.0,
+                            ),
+                            const Text(
+                              "Scan with your mobile device",
+                              style: TextStyle(fontSize: 20),
+                            )
+                          ]
                     ),
                     const Column(
                       children: [

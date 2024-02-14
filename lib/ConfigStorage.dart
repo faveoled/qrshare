@@ -1,16 +1,7 @@
 import 'dart:io';
-
+import 'package:path/path.dart';
 import 'package:qrshare/QrcpConfig.dart';
-
-extension StringExtensions on String {
-  String removeTrailingSlash() {
-    if (endsWith('/')) {
-      return substring(0, length - 1);
-    } else {
-      return this;
-    }
-  }
-}
+import 'package:qrshare/StringExtensions.dart';
 
 class ConfigStorage {
 
@@ -23,13 +14,26 @@ class ConfigStorage {
   }
 
   String ensureConfigFile() {
-    final envVar = Platform.environment['XDG_CONFIG_HOME'];
-    final homeVar = Platform.environment['HOME'];
-    if (homeVar == null) {
-      throw Exception("HOME is not defined");
+    String locationBase;
+    if (Platform.isWindows) {
+      final envVar = Platform.environment["LOCALAPPDATA"];
+      if (envVar == null) {
+        throw Exception("LOCALAPPDATA is not defined");
+      }
+      locationBase = envVar;
+    } else {
+      final envVar = Platform.environment['XDG_CONFIG_HOME'];
+      final homeVar = Platform.environment['HOME'];
+      if (envVar == null && homeVar == null) {
+        throw Exception("XDG_CONFIG_HOME and HOME is not defined");
+      }
+      if (envVar != null) {
+        locationBase = envVar;
+      } else {
+        locationBase = join(homeVar!.withoutTrailingSlash(), ".config");
+      }
     }
-    final targetVar = envVar ?? homeVar;
-    var finalLocation = '${targetVar.removeTrailingSlash()}/.config/qrcp/config.yml';
+    final finalLocation = join(locationBase.withoutTrailingSlash(), "qrcp", "config.yml");
     ensureDirectory(finalLocation);
     return finalLocation;
   }
