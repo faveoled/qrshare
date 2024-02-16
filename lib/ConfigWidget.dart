@@ -303,9 +303,10 @@ class _ConfigWidgetState extends State<ConfigWidget> {
                 suffixIcon: IconButton( // Add a suffix icon
                   icon: const Icon(Icons.folder_open), // Use a folder icon
                   onPressed: () async { // Define the action to open the file picker
-                    FilePickerResult? result = await FilePicker.platform.pickFiles(); // Pick a file
-                    if (result != null && result.files.single.path != null) { // If a file is picked
-                      outputController.text = result.files.single.path!; // Set the text field value to the file path
+                    final initial = isValidDirectoryPath(outputController.text) ? outputController.text : null;
+                    String? selectedDirectory = await FilePicker.platform.getDirectoryPath(initialDirectory: initial); // Pick a file
+                    if (selectedDirectory != null) { // If a directory is picked
+                      outputController.text = selectedDirectory; // Set the text field value to the file path
                     }
                   },
                 ),
@@ -398,4 +399,13 @@ class _ConfigWidgetState extends State<ConfigWidget> {
     );
   }
 
+
+  bool isValidDirectoryPath(String path) {
+    try {
+      Directory(path);
+      return true;
+    } on FileSystemException catch (_) {
+      return false;
+    }
+  }
 }
