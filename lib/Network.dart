@@ -10,7 +10,8 @@ class Network {
   }
 
   static Future<String?> getWlanInterface() async {
+    var prefix = Platform.isWindows ? "Wi-" : "wl";
     final List<String> allNames = await getNetworkInterfaces();
-    return allNames.firstWhereOrNull((name) => name.startsWith("wl"));
+    return allNames.firstWhereOrNull((name) => name.startsWith(prefix));
   }
 }
