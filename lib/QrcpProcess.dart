@@ -11,6 +11,11 @@ import 'package:path/path.dart';
 class QrcpProcess {
 
   static String getQrcpCmd() {
+    var qrcpCmd = Platform.environment["QRCP_CMD"];
+    if (qrcpCmd != null) {
+      return qrcpCmd;
+    }
+
     if (Platform.isWindows) {
       Directory execDir = Directory(Platform.resolvedExecutable).parent;
       String targetFile = join(execDir.path, 'qrcp.exe');
