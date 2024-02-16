@@ -35,8 +35,17 @@ class QrcpProcess {
   }
 
   Future<(Future<String>, Process)> runProcess(BuildContext context, String cmd, List<String> arguments) async {
+    final errorsModel = context.read<ErrorsModel>();
+
     print("Running cmd: $cmd: args: $arguments");
-    Process process = await Process.start(cmd, arguments, workingDirectory: Env.getDownloadDir());
+    Process process;
+    try {
+      process = await Process.start(cmd, arguments, workingDirectory: Env.getDownloadDir());
+    } catch (e) {
+      errorsModel.write(e.toString());
+      errorsModel.write("\n");
+      throw e;
+    }
 
     final outBuff = StringBuffer();
 
@@ -56,7 +65,6 @@ class QrcpProcess {
     });
 
     process.stderr.transform(utf8.decoder).listen((data) {
-      final errorsModel = context.read<ErrorsModel>();
       errorsModel.write("qrcp err: $data");
     });
     return (completer.future, process);
