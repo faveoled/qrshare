@@ -28,7 +28,7 @@ class QrcpConfig {
   factory QrcpConfig.getDefaults() {
     return QrcpConfig(
         'any',
-        '0.0.0.0', null, null, Env.getDownloadDir(), null, false, false, null, null
+        null, null, null, Env.getDownloadDir(), null, false, false, null, null
     );
   }
 
