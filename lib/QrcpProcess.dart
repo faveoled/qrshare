@@ -40,7 +40,7 @@ class QrcpProcess {
     print("Running cmd: $cmd: args: $arguments");
     Process process;
     try {
-      process = await Process.start(cmd, arguments, workingDirectory: Env.getDownloadDir());
+      process = await Process.start(cmd, arguments, workingDirectory: Env.getDownloadDir(), runInShell: true);
     } catch (e) {
       errorsModel.write(e.toString());
       errorsModel.write("\n");
