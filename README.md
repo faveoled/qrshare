@@ -2,6 +2,12 @@
 
 A new Flutter project.
 
+![QRShare send](https://github.com/faveoled/qrshare/blob/assets/qrshare_send.png?raw=true)
+![QRShare receive](https://github.com/faveoled/qrshare/blob/assets/qrshare_receive.png?raw=true)
+
+
+https://github.com/faveoled/qrshare/blob/assets/qrshare_receive.png?raw=true
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
